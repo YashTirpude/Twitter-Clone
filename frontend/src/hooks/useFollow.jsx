@@ -10,10 +10,10 @@ const useFollow = () => {
         const res = await fetch(`/api/users/follow/${userId}`, {
           method: "POST",
         });
-        const data = await res.json();
 
+        const data = await res.json();
         if (!res.ok) {
-          throw new Error(data.message || "Something went wrong!");
+          throw new Error(data.error || "Something went wrong!");
         }
         return;
       } catch (error) {
@@ -23,9 +23,8 @@ const useFollow = () => {
     onSuccess: () => {
       Promise.all([
         queryClient.invalidateQueries({ queryKey: ["suggestedUsers"] }),
-        queryClient.invalidateQueries({ queryKey: ["authUsers"] }),
+        queryClient.invalidateQueries({ queryKey: ["authUser"] }),
       ]);
-      toast.success("Followed successfully");
     },
     onError: (error) => {
       toast.error(error.message);
